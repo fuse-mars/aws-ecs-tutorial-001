@@ -24,6 +24,8 @@ You interact with aws ecs, through the AWS web console or by using [ecs-cli](htt
 We are going to use [an application](http://fuse-mars.github.io/spring-akka-command/) that allows you to save your Food spending.
 
 * Installing ecs-cli
+  Follow [the link from AWS](http://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CLI_installation.html) to install and configure ecs-cli.
+
 * Getting the Application code
 * Setting up the docker-compose.yml file
 * Creating the cluster
