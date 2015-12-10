@@ -30,7 +30,7 @@ We are going to use [an application](http://fuse-mars.github.io/spring-akka-comm
 * Getting the Application code
   ecs-cli uses docker-compose like syntax, so the basic knowledge of Docker Compose is expected. 
   There some exceptions though:
-  * ecs-cli does not support "build" configuration value, so you always have to use "image" value.
+  * ecs-cli does not support "dockerfile" configuration value, so you always have to use "image" value.
   * 
 
 You can use [my pre built docker image](https://hub.docker.com/r/fusemars/akkaspring_query/) of the application
@@ -65,14 +65,24 @@ ENTRYPOINT gradle build bootRun -p spring-akka-command
 ```
 
 ```
-docker build -t username/akkaspring_query -f Dockerfile .
+docker build -t username/akkaspring_query -f Dockerfile . # replace "username" with your dockerhub username
 ```
 
 * Setting up the docker-compose.yml file
 ```yml
+# replace "username" with your dockerhub username
+web:
+  image: username/akkaspring_query:latest
+  ports:
+   - "5000:5000"
+   - "9090:9090"
+  environment:
+   - HOSTNAME=localhost
 
 ```
 * Creating the cluster
+```
+```
 * Running the application
 * Cleaning up everything.
 
