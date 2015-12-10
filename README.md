@@ -34,11 +34,11 @@ We are going to use [an application](http://fuse-mars.github.io/spring-akka-comm
   * 
 
 You can use [my pre built docker image](https://hub.docker.com/r/fusemars/akkaspring_query/) of the application
-```
+```shell
 docker pull fusemars/akkaspring_query
 ```
 or download the code and build your own
-```
+```dockerfile
 # Dockerfile content
 
 FROM niaquinto/gradle
@@ -74,16 +74,23 @@ docker build -t username/akkaspring_query -f Dockerfile . # replace "username" w
 web:
   image: username/akkaspring_query:latest
   ports:
-   - "5000:5000"
-   - "9090:9090"
+   - "9090:9090" # spring boot app listens to this port
   environment:
-   - HOSTNAME=localhost
+   - HOSTNAME=localhost # this is required by the AKKA system
 
 ```
+* Test locally
+```shell
+docker-compose --file docker-compose-use-image.yml up
+```
+After successiful run, you should be able to access your app at `<host-ip>:9090`
 * Creating the cluster
 ```
+
 ```
 * Running the application
+```
+```
 * Cleaning up everything.
 
 
