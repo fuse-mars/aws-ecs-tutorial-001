@@ -5,7 +5,7 @@ Bullet points:
 * Audience
 * Define AWS ECS
 * Use case
-* Step by step walkthrough 
+* [Step by step walkthrough](#step-by-step-walkthrough) 
 
 ## Audience
 This tutorial is for people who knows how to use Docker and write gradle based applications.
