@@ -14,7 +14,7 @@ You should also be familiar with Amazon Webservices (AWS).
 ## Define AWS ECS
 AWS EC2 Container Service (ECS) is a container management service that allows users to run containers in a scalable and secure way. For more info you visit [AWS website](https://aws.amazon.com/ecs/).
 
-You interact with aws ecs, through the AWS web console or by using [ecs-cli]() , the command line tool provided by Amazon.
+You interact with aws ecs, through the AWS web console or by using [ecs-cli](http://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CLI.html) , the command line tool provided by Amazon.
 
 ## Use case
 
