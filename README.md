@@ -62,9 +62,8 @@ EXPOSE 9090
 CMD [" build bootRun"]
 
 ENTRYPOINT gradle build bootRun -p spring-akka-command
-
-
 ```
+
 ```
 docker build -t username/akkaspring_query -f Dockerfile .
 ```
