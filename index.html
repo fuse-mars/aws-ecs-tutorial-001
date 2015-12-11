@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Aws-ecs-tutorial-001 by fuse-mars</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Aws-ecs-tutorial-001</h1>
+      <h2 class="project-tagline">This tutorial introduces you on how to run a gradle based project using the AWS ecs-cli tool.</h2>
+      <a href="https://github.com/fuse-mars/aws-ecs-tutorial-001" class="btn">View on GitHub</a>
+      <a href="https://github.com/fuse-mars/aws-ecs-tutorial-001/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/fuse-mars/aws-ecs-tutorial-001/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="aws-ecs-tutorial" class="anchor" href="#aws-ecs-tutorial" aria-hidden="true"><span class="octicon octicon-link"></span></a>AWS ECS Tutorial</h1>
+
+<p>This tutorial introduces you on how to run a gradle based project using the AWS ecs-cli tool.</p>
+
+<p>Bullet points:</p>
+
+<ul>
+<li>Audience</li>
+<li>Define AWS ECS</li>
+<li>Use case</li>
+<li><a href="#step-by-step-walkthrough">Step by step walkthrough</a></li>
+<li>Future work</li>
+</ul>
+
+<h2>
+<a id="audience" class="anchor" href="#audience" aria-hidden="true"><span class="octicon octicon-link"></span></a>Audience</h2>
+
+<p>This tutorial is for people who knows how to use Docker, DOcker Compose, and write gradle based applications.
+You should also be familiar with Amazon Webservices (AWS).</p>
+
+<h2>
+<a id="define-aws-ecs" class="anchor" href="#define-aws-ecs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Define AWS ECS</h2>
+
+<p>AWS EC2 Container Service (ECS) is a container management service that allows users to run containers in a scalable and secure way. For more info you visit <a href="https://aws.amazon.com/ecs/">AWS website</a>.</p>
+
+<p>You interact with aws ecs, through the AWS web console or by using <a href="http://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CLI.html">ecs-cli</a>, the command line tool provided by Amazon.</p>
+
+<h2>
+<a id="use-case" class="anchor" href="#use-case" aria-hidden="true"><span class="octicon octicon-link"></span></a>Use case</h2>
+
+<h2>
+<a id="step-by-step-walkthrough" class="anchor" href="#step-by-step-walkthrough" aria-hidden="true"><span class="octicon octicon-link"></span></a>Step by step walkthrough</h2>
+
+<p>We are going to use <a href="http://fuse-mars.github.io/spring-akka-command/">an application</a> that allows you to save your Food spending. I used a "ubuntu 14.04 x86_64" machine for this tutorial.</p>
+
+<ul>
+<li>
+<p>Installing ecs-cli</p>
+
+<p>Follow <a href="http://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CLI_installation.html">the link from AWS</a> to install and configure ecs-cli.</p>
+</li>
+<li>
+<p>Getting the Application code
+ecs-cli uses docker-compose like syntax, so the basic knowledge of Docker Compose is expected. 
+There some exceptions though:</p>
+
+<ul>
+<li>ecs-cli does not support "dockerfile" configuration value, so you always have to use "image" value.</li>
+<li>
+</ul>
+</li>
+</ul>
+
+<p>You can use <a href="https://hub.docker.com/r/fusemars/akkaspring_command/">my pre built docker image</a> of the application</p>
+
+<div class="highlight highlight-source-shell"><pre>docker pull fusemars/akkaspring_command</pre></div>
+
+<p>or download the code and build your own</p>
+
+<div class="highlight highlight-source-dockerfile"><pre><span class="pl-c"># Dockerfile content</span>
+
+<span class="pl-k">FROM</span> niaquinto/gradle
+<span class="pl-k">MAINTAINER</span> Full Name &lt;username@company.com&gt;
+<span class="pl-k">WORKDIR</span> /
+
+<span class="pl-k">RUN</span> apt-get update
+<span class="pl-k">RUN</span> apt-get dist-upgrade -y
+
+<span class="pl-k">RUN</span> DEBIAN_FRONTEND=noninteractive apt-get -y dist-upgrade
+<span class="pl-k">RUN</span> DEBIAN_FRONTEND=noninteractive apt-get -y install python-software-properties
+<span class="pl-k">RUN</span> DEBIAN_FRONTEND=noninteractive apt-get -y install software-properties-common
+
+<span class="pl-k">RUN</span> DEBIAN_FRONTEND=noninteractive apt-get install --yes --force-yes git
+
+<span class="pl-k">RUN</span> git clone https://github.com/fuse-mars/spring-akka-command.git
+
+<span class="pl-k">RUN</span> echo $(ls -al /)
+<span class="pl-k">EXPOSE</span> 9090
+
+<span class="pl-k">CMD</span> [<span class="pl-s">" build bootRun"</span>]
+
+<span class="pl-k">ENTRYPOINT</span> gradle build bootRun -p spring-akka-command</pre></div>
+
+<pre><code>docker build -t username/akkaspring_command -f Dockerfile . # replace "username" with your dockerhub username
+</code></pre>
+
+<ul>
+<li>Setting up the docker-compose.yml file</li>
+</ul>
+
+<div class="highlight highlight-source-yaml"><pre><span class="pl-c"># replace "username" with your dockerhub username</span>
+<span class="pl-s"><span class="pl-ent">web:</span></span>
+  <span class="pl-s"><span class="pl-ent">image:</span> <span class="pl-s">username/akkaspring_command</span></span>
+  <span class="pl-c1"><span class="pl-ent">cpu_shares:</span> 100</span>
+  <span class="pl-c1"><span class="pl-ent">mem_limit:</span> 1024288000</span>
+  <span class="pl-s"><span class="pl-ent">ports:</span></span>
+   <span class="pl-s">- <span class="pl-s"><span class="pl-pds">"</span>9090:9090<span class="pl-pds">"</span></span></span>
+  <span class="pl-s"><span class="pl-ent">environment:</span></span>
+   <span class="pl-s">- <span class="pl-s">HOSTNAME=localhost</span></span>
+</pre></div>
+
+<ul>
+<li>Test locally</li>
+</ul>
+
+<div class="highlight highlight-source-shell"><pre>docker-compose --file docker-compose-use-image.yml up</pre></div>
+
+<p>After successiful run, you should be able to access your app at <code>&lt;host-ip&gt;:9090</code></p>
+
+<ul>
+<li>Creating the cluster</li>
+</ul>
+
+<div class="highlight highlight-source-shell"><pre><span class="pl-k">export</span> AWS_ACCESS_KEY_ID=<span class="pl-k">&lt;</span>aws-id<span class="pl-k">&gt;</span>
+<span class="pl-k">export</span> AWS_SECRET_ACCESS_KEY=<span class="pl-k">&lt;</span>aws-secret<span class="pl-k">&gt;</span>
+ecs-cli configure --region us-east-1 --access-key <span class="pl-smi">$AWS_ACCESS_KEY_ID</span> --secret-key <span class="pl-smi">$AWS_SECRET_ACCESS_KEY</span> --cluster food-spending <span class="pl-c">#replace "food-spending" with your favorite name</span>
+ecs-cli up --keypair id_rsa --capability-iam --size 2 --instance-type t2.medium <span class="pl-c"># replace "id_rsa" with the name of your existing aws keypair.</span></pre></div>
+
+<p>Here we have two important commands <code>ecs-cli configure</code> and <code>ecs-cli up</code>. The former configures your machine so that ecs-cli can connect to aws and access ec2 instances easily. The latter creates the cluster and adds instances to it.</p>
+
+<p>The <code>ecs-cli up</code> allows to specify the security group <code>--security-group group_id</code>, which is good when you want to enable diffrent port for public access. howevwer, i could not get it to work <strong>LEFT FOR TODO</strong></p>
+
+<ul>
+<li>Running the application</li>
+</ul>
+
+<div class="highlight highlight-source-shell"><pre>ecs-cli compose --file docker-compose.yml service up <span class="pl-c"># replace "docker-compose.yml"  with the path to your docker-compose file</span></pre></div>
+
+<ul>
+<li>Cleaning up everything</li>
+</ul>
+
+<pre><code>ecs-cli compose --file docker-compose.yml service rm
+ecs-cli down --force
+</code></pre>
+
+<h2>
+<a id="future-work" class="anchor" href="#future-work" aria-hidden="true"><span class="octicon octicon-link"></span></a>Future work</h2>
+
+<ul>
+<li>How do you assign domain names to instances of the ecs cluster?</li>
+<li>How to use cloud front with ecs?</li>
+<li>Is there a possibility to run multiple apps on the same cluster?</li>
+</ul>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/fuse-mars/aws-ecs-tutorial-001">Aws-ecs-tutorial-001</a> is maintained by <a href="https://github.com/fuse-mars">fuse-mars</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
