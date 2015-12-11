@@ -109,6 +109,7 @@ ecs-cli down --force
 ```
 
 ## Future work
+* How to find instances managed by the cluster
 * How do you assign domain names to instances of the ecs cluster?
 * How to use cloud front with ecs?
 * Is there a possibility to run multiple apps on the same cluster?
