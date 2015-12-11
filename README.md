@@ -5,7 +5,8 @@ Bullet points:
 * Audience
 * Define AWS ECS
 * Use case
-* [Step by step walkthrough](#step-by-step-walkthrough) 
+* [Step by step walkthrough](#step-by-step-walkthrough)
+* Future work
 
 ## Audience
 This tutorial is for people who knows how to use Docker, DOcker Compose, and write gradle based applications.
@@ -107,4 +108,8 @@ ecs-cli compose --file docker-compose.yml service rm
 ecs-cli down --force
 ```
 
+## Future work
+* How do you assign domain names to instances of the ecs cluster?
+* How to use cloud front with ecs?
+* Is there a possibility to run multiple apps on the same cluster?
 
