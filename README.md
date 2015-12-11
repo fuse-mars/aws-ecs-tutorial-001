@@ -72,7 +72,9 @@ docker build -t username/akkaspring_query -f Dockerfile . # replace "username" w
 ```yml
 # replace "username" with your dockerhub username
 web:
-  image: username/akkaspring_query:latest
+  image: username/akkaspring_query
+  cpu_shares: 100
+  mem_limit: 1024288000
   ports:
    - "9090:9090" # spring boot app listens to this port
   environment:
