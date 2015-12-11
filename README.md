@@ -95,11 +95,12 @@ Here we have two important commands `ecs-cli configure` and `ecs-cli up`. The fo
 
 * Running the application
 ```shell
-ecs-cli compose --file docker-compose.yml up # replace "docker-compose.yml"  with the path to your docker-compose file
+ecs-cli compose --file docker-compose.yml service up # replace "docker-compose.yml"  with the path to your docker-compose file
 ```
 * Cleaning up everything
 ```
-
+ecs-cli compose --file docker-compose.yml service rm
+ecs-cli down --force
 ```
 
 
