@@ -33,16 +33,16 @@ We are going to use [an application](http://fuse-mars.github.io/spring-akka-comm
   * ecs-cli does not support "dockerfile" configuration value, so you always have to use "image" value.
   * 
 
-You can use [my pre built docker image](https://hub.docker.com/r/fusemars/akkaspring_query/) of the application
+You can use [my pre built docker image](https://hub.docker.com/r/fusemars/akkaspring_command/) of the application
 ```shell
-docker pull fusemars/akkaspring_query
+docker pull fusemars/akkaspring_command
 ```
 or download the code and build your own
 ```dockerfile
 # Dockerfile content
 
 FROM niaquinto/gradle
-MAINTAINER Marcellin Nshimiyimana <nmarcellin2@gmail.com>
+MAINTAINER Full Name <username@company.com>
 WORKDIR /
 
 RUN apt-get update
@@ -65,20 +65,20 @@ ENTRYPOINT gradle build bootRun -p spring-akka-command
 ```
 
 ```
-docker build -t username/akkaspring_query -f Dockerfile . # replace "username" with your dockerhub username
+docker build -t username/akkaspring_command -f Dockerfile . # replace "username" with your dockerhub username
 ```
 
 * Setting up the docker-compose.yml file
 ```yml
 # replace "username" with your dockerhub username
 web:
-  image: username/akkaspring_query
+  image: username/akkaspring_command
   cpu_shares: 100
   mem_limit: 1024288000
   ports:
-   - "9090:9090" # spring boot app listens to this port
+   - "9090:9090"
   environment:
-   - HOSTNAME=localhost # this is required by the AKKA system
+   - HOSTNAME=localhost
 
 ```
 * Test locally
@@ -94,6 +94,8 @@ ecs-cli configure --region us-east-1 --access-key $AWS_ACCESS_KEY_ID --secret-ke
 ecs-cli up --keypair id_rsa --capability-iam --size 2 --instance-type t2.medium # replace "id_rsa" with the name of your existing aws keypair.
 ```
 Here we have two important commands `ecs-cli configure` and `ecs-cli up`. The former configures your machine so that ecs-cli can connect to aws and access ec2 instances easily. The latter creates the cluster and adds instances to it.
+
+The `ecs-cli up` allows to specify the security group `--security-group group_id`, which is good when you want to enable diffrent port for public access. howevwer, i could not get it to work **LEFT FOR TODO**
 
 * Running the application
 ```shell
