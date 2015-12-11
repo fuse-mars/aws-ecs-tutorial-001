@@ -21,7 +21,7 @@ You interact with aws ecs, through the AWS web console or by using [ecs-cli](htt
 
 ## Step by step walkthrough
 
-We are going to use [an application](http://fuse-mars.github.io/spring-akka-command/) that allows you to save your Food spending.
+We are going to use [an application](http://fuse-mars.github.io/spring-akka-command/) that allows you to save your Food spending. I used a "ubuntu 14.04 x86_64" machine for this tutorial.
 
 * Installing ecs-cli
   
@@ -85,13 +85,21 @@ docker-compose --file docker-compose-use-image.yml up
 ```
 After successiful run, you should be able to access your app at `<host-ip>:9090`
 * Creating the cluster
+```shell
+export AWS_ACCESS_KEY_ID=<aws-id>
+export AWS_SECRET_ACCESS_KEY=<aws-secret>
+ecs-cli configure --region us-east-1 --access-key $AWS_ACCESS_KEY_ID --secret-key $AWS_SECRET_ACCESS_KEY --cluster food-spending #replace "food-spending" with your favorite name
+ecs-cli up --keypair id_rsa --capability-iam --size 2 --instance-type t2.medium # replace "id_rsa" with the name of your existing aws keypair.
 ```
+Here we have two important commands `ecs-cli configure` and `ecs-cli up`. The former configures your machine so that ecs-cli can connect to aws and access ec2 instances easily. The latter creates the cluster and adds instances to it.
 
-```
 * Running the application
+```shell
+ecs-cli compose --file docker-compose.yml up # replace "docker-compose.yml"  with the path to your docker-compose file
 ```
+* Cleaning up everything
 ```
-* Cleaning up everything.
 
+```
 
 
